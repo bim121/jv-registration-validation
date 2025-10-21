@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import core.basesyntax.dao.StorageDaoImpl;
 import core.basesyntax.db.Storage;
 import core.basesyntax.exception.RegistrationException;
 import core.basesyntax.model.User;
@@ -28,14 +29,18 @@ public class HelloWorldTest {
     void register_validUser_ok() {
         User user = new User();
         user.setLogin("validLogin");
-        user.setPassword("securePass");
-        user.setAge(25);
+        user.setPassword("strongPass");
+        user.setAge(20);
 
-        User registered = registrationServiceImpl.register(user);
+        registrationServiceImpl.register(user);
 
-        assertNotNull(registered);
-        assertEquals("validLogin", registered.getLogin());
-        assertEquals(25, registered.getAge());
+        StorageDaoImpl storageDao = new StorageDaoImpl();
+        User stored = storageDao.get("validLogin");
+
+        assertNotNull(stored, "User should be saved in storage after successful registration");
+        assertEquals(user.getLogin(), stored.getLogin());
+        assertEquals(user.getPassword(), stored.getPassword());
+        assertEquals(user.getAge(), stored.getAge());
     }
 
     @Test
@@ -83,6 +88,34 @@ public class HelloWorldTest {
     }
 
     @Test
+    void register_emptyLogin_notOk() {
+        User user = new User();
+        user.setLogin("");
+        user.setPassword("validPass");
+        user.setAge(20);
+
+        RegistrationException e = assertThrows(
+                RegistrationException.class,
+                () -> registrationServiceImpl.register(user)
+        );
+        assertEquals("Login must be at least 6 characters long", e.getMessage());
+    }
+
+    @Test
+    void register_shortLogin3_notOk() {
+        User user = new User();
+        user.setLogin("abc");
+        user.setPassword("validPass");
+        user.setAge(20);
+
+        RegistrationException e = assertThrows(
+                RegistrationException.class,
+                () -> registrationServiceImpl.register(user)
+        );
+        assertEquals("Login must be at least 6 characters long", e.getMessage());
+    }
+
+    @Test
     void register_nullPassword_notOk() {
         User user = new User();
         user.setLogin("userLogin");
@@ -118,6 +151,34 @@ public class HelloWorldTest {
         user.setAge(20);
 
         assertDoesNotThrow(() -> registrationServiceImpl.register(user));
+    }
+
+    @Test
+    void register_emptyPassword_notOk() {
+        User user = new User();
+        user.setLogin("validLogin");
+        user.setPassword("");
+        user.setAge(20);
+
+        RegistrationException e = assertThrows(
+                RegistrationException.class,
+                () -> registrationServiceImpl.register(user)
+        );
+        assertEquals("Password must be at least 6 characters long", e.getMessage());
+    }
+
+    @Test
+    void register_shortPassword3_notOk() {
+        User user = new User();
+        user.setLogin("validLogin");
+        user.setPassword("abc");
+        user.setAge(20);
+
+        RegistrationException e = assertThrows(
+                RegistrationException.class,
+                () -> registrationServiceImpl.register(user)
+        );
+        assertEquals("Password must be at least 6 characters long", e.getMessage());
     }
 
     @Test
@@ -170,6 +231,20 @@ public class HelloWorldTest {
         user.setAge(18);
 
         assertDoesNotThrow(() -> registrationServiceImpl.register(user));
+    }
+
+    @Test
+    void register_age17_notOk() {
+        User user = new User();
+        user.setLogin("validLogin");
+        user.setPassword("validPass");
+        user.setAge(17);
+
+        RegistrationException e = assertThrows(
+                RegistrationException.class,
+                () -> registrationServiceImpl.register(user)
+        );
+        assertEquals("Age must be at least 18", e.getMessage());
     }
 
     @Test
