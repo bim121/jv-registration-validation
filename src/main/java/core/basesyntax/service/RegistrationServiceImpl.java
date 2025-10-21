@@ -20,13 +20,17 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new RegistrationException("Login can't be null");
         }
         if (user.getLogin().length() < MIN_LOGIN_LENGTH) {
-            throw new RegistrationException("Login must be at least " + MIN_LOGIN_LENGTH + " characters long");
+            throw new RegistrationException(
+                    "Login must be at least " + MIN_LOGIN_LENGTH + " characters long"
+            );
         }
         if (user.getPassword() == null) {
             throw new RegistrationException("Password can't be null");
         }
         if (user.getPassword().length() < MIN_PASSWORD_LENGTH) {
-            throw new RegistrationException("Password must be at least " + MIN_PASSWORD_LENGTH + " characters long");
+            throw new RegistrationException(
+                    "Password must be at least " + MIN_PASSWORD_LENGTH + " characters long"
+            );
         }
         if (user.getAge() == null) {
             throw new RegistrationException("Age can't be null");
@@ -35,7 +39,9 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new RegistrationException("Age must be at least " + MIN_AGE);
         }
         if (storageDao.get(user.getLogin()) != null) {
-            throw new RegistrationException("User with login '" + user.getLogin() + "' already exists");
+            throw new RegistrationException(
+                    "User with login '" + user.getLogin() + "' already exists"
+            );
         }
         return storageDao.add(user);
     }
