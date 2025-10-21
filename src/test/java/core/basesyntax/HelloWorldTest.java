@@ -1,6 +1,5 @@
 package core.basesyntax;
 
-import core.basesyntax.dao.StorageDaoImpl;
 import core.basesyntax.db.Storage;
 import core.basesyntax.exception.RegistrationException;
 import core.basesyntax.model.User;
@@ -18,13 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
  */
 public class HelloWorldTest {
     private RegistrationServiceImpl registrationServiceImpl;
-    private StorageDaoImpl storageDao;
 
     @BeforeEach
     void setUp() {
         Storage.people.clear();
         registrationServiceImpl = new RegistrationServiceImpl();
-        storageDao = new StorageDaoImpl();
     }
 
     @Test
