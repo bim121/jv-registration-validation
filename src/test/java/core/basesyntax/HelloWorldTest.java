@@ -4,10 +4,11 @@ import core.basesyntax.db.Storage;
 import core.basesyntax.exception.RegistrationException;
 import core.basesyntax.model.User;
 import core.basesyntax.service.RegistrationServiceImpl;
-import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -79,7 +80,7 @@ public class HelloWorldTest {
         user.setPassword("password123");
         user.setAge(20);
 
-        Assertions.assertDoesNotThrow(() -> registrationServiceImpl.register(user));
+        assertDoesNotThrow(() -> registrationServiceImpl.register(user));
     }
 
     @Test
@@ -117,7 +118,7 @@ public class HelloWorldTest {
         user.setPassword("strong");
         user.setAge(20);
 
-        Assertions.assertDoesNotThrow(() -> registrationServiceImpl.register(user));
+        assertDoesNotThrow(() -> registrationServiceImpl.register(user));
     }
 
     @Test
@@ -169,7 +170,7 @@ public class HelloWorldTest {
         user.setPassword("password123");
         user.setAge(18);
 
-        Assertions.assertDoesNotThrow(() -> registrationServiceImpl.register(user));
+        assertDoesNotThrow(() -> registrationServiceImpl.register(user));
     }
 
     @Test
